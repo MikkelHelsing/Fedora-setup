@@ -43,6 +43,7 @@ sudo dnf install fastfetch -y
 curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz
 sudo mkdir /usr/share/fonts/jetbrains-mono
 sudo tar -xf JetBrainsMono.tar.xz -C /usr/share/fonts/jetbrains-mono
+rm -f JetBrainsMono.tar.xz
 
 rm -f ~/.zshrc
 cp -r 'assets/.zshrc' ~/
@@ -53,6 +54,10 @@ sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
 dnf check-update
 sudo dnf install code -y
+
+# Zen
+echo "Installing Zen Browser..."
+bash <(curl -s https://updates.zen-browser.app/install.sh)
 
 # Copy dotfiles
 echo "Copying dotfiles..."
