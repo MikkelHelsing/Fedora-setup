@@ -15,3 +15,6 @@ Fedora Everything: https://alt.fedoraproject.org/
 sudo dnf update || sudo dnf upgrade
 ```
 
+```bash
+sudo bash ./install.sh
+```
