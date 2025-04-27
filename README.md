@@ -7,9 +7,6 @@ Fedora Everything: https://alt.fedoraproject.org/
 - Administration Tools
 - C Development Tools and Libraries
 - Development tools
-### Other
-- Disk encrypted
-- No root
 
 ```bash
 sudo dnf update || sudo dnf upgrade
