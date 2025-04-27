@@ -13,5 +13,5 @@ sudo dnf update || sudo dnf upgrade
 ```
 
 ```bash
-sudo bash ./install.sh
+bash ./install.sh
 ```
