@@ -1,16 +1,17 @@
 #!/bin/bash
 
-install_all=0
-install_dots=0
-install_nvidia=0
+install_all="false"
+install_dots="false"
+install_nvidia="false"
 
 RED="$(tput setaf 1)"
 GREEN="$(tput setaf 2)"
 SKY_BLUE="$(tput setaf 6)"
+YELLOW="$(tput setaf 3)" 
 RESET="$(tput sgr0)"
 
 if [[ $EUID -eq 0 ]]; then
-    echo "${RED}Root user detected, this script should no be executed as root. Exiting...${RESET}"
+    echo "${RED}❌ Root user detected, this script should no be executed as root! Exiting...${RESET}"
     exit 1
 fi
 
@@ -31,16 +32,16 @@ print_help() {
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --all)
-            install_all=1
-            install_dots=1
+            install_all="true"
+            install_dots="true"
             shift
             ;;
         --dots)
-            install_dots=1
+            install_dots="true"
             shift
             ;;
         --nvidia)
-            install_nvidia=1
+            install_nvidia="true"
             shift
             ;;
         -h|--help)
@@ -76,12 +77,16 @@ prompt_user() {
 ############################
 
 # Install Nvidia 
-if lspci | grep -i "nvidia" &> /dev/null; then
-    if install_nvidia || prompt_user "Do you wanna install ${GREEN}Nvidia Drivers${RESET}?"; then
+if [ "$install_nvidia" = "true" ] || prompt_user "Do you wanna install ${GREEN}Nvidia Drivers${RESET}?"; then
+    if lspci | grep -i "nvidia" &> /dev/null; then
         sudo dnf install akmod-nvidia xorg-x11-drv-nvidia-cuda libva libva-nvidia-driver -y
-        additional_options="rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1 nvidia_drm.fbdev=1"
-        sudo sed -i "s/GRUB_CMDLINE_LINUX=\"/GRUB_CMDLINE_LINUX=\"$additional_options /" /etc/default/grub
+        if ! grep -q "GRUB_CMDLINE_LINUX.*$additional_options" /etc/default/grub; then
+            additional_options="rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1 nvidia_drm.fbdev=1"
+            sudo sed -i "s/GRUB_CMDLINE_LINUX=\"/GRUB_CMDLINE_LINUX=\"$additional_options /" /etc/default/grub
+        fi
         sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+    else
+        echo "${YELLOW}[WARNING] Beware NVIDIA gpu not found, skipping installation...${RESET}"
     fi
 fi
 
@@ -92,7 +97,7 @@ sudo systemctl enable sddm
 sudo dnf install qt6-qt5compat qt6-qtdeclarative qt6-qtsvg -y
 
 ## Install theme for sddm
-if install_dots || prompt_user "Do you wanna install ${SKY_BLUE}Where Is My SDDM Theme${RESET}?"; then
+if [ "$install_dots" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Where Is My SDDM Theme${RESET}?"; then
     echo "Installing Where is my SDDM theme..."
     git clone https://github.com/stepanzubkov/where-is-my-sddm-theme.git
     sudo ./where-is-my-sddm-theme/install.sh current
@@ -108,26 +113,26 @@ sudo systemctl set-default graphical.target
 sudo dnf install gtk2 gtk3 gtk3-devel -y
 sudo dnf install xdg-desktop-portal-hyprland xdg-desktop-portal-gtk -y
 
-if install_dots || prompt_user "Do you wanna install ${SKY_BLUE}GTK Theme${RESET}?"; then
+if [ "$install_dots" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}GTK Theme${RESET}?"; then
     echo "Installing Where is my GTK theme..."
     sudo dnf install materia-gtk-theme -y     
     sudo dnf install papirus-icon-theme -y  
 fi
 
 # Install foot
-if install_all || prompt_user "Do you wanna install ${SKY_BLUE}Foot${RESET}?"; then
+if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Foot${RESET}?"; then
     echo "Installing Foot..."
     sudo dnf install foot -y
 fi
 
 ## Install Oh My ZSH
-if install_all || prompt_user "Do you wanna install ${SKY_BLUE}ZSH${RESET}?"; then
+if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}ZSH${RESET}?"; then
     echo "Installing Oh My ZSH..."
 
     sudo dnf install zsh -y 
     sudo chsh -s /bin/zsh
 
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    sh -c "$(curl -fsSL https://install.ohmyz.sh)" "" --unattended
     git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions 
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting 
 
@@ -142,6 +147,8 @@ if install_all || prompt_user "Do you wanna install ${SKY_BLUE}ZSH${RESET}?"; th
 
     rm -f ~/.zshrc
     cp -r 'assets/.zshrc' ~/
+    
+    chsh -s "$(command -v zsh)"
 fi
 
 ############################
@@ -149,7 +156,7 @@ fi
 ############################
 
 # VSCode
-if install_all || prompt_user "Do you wanna install ${SKY_BLUE}VSCODE${RESET}?"; then
+if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}VSCODE${RESET}?"; then
     echo "Installing VSCode..."
     sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
     sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
@@ -158,19 +165,19 @@ if install_all || prompt_user "Do you wanna install ${SKY_BLUE}VSCODE${RESET}?";
 fi
 
 # Zen
-if install_all || prompt_user "Do you wanna install ${SKY_BLUE}Zen Browser${RESET}?"; then
+if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Zen Browser${RESET}?"; then
     echo "Installing Zen Browser..."
     bash "installer/zen_install.sh"
 fi
 
 # Easyeffect
-if install_all || prompt_user "Do you wanna install ${SKY_BLUE}Easy Effects Equalizer${RESET}?"; then
+if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Easy Effects Equalizer${RESET}?"; then
     echo "Installing Easyeffect..."
     sudo dnf install easyeffects -y
 fi
 
 # Blueman
-if install_all || prompt_user "Do you wanna install ${SKY_BLUE}Blueman${RESET}?"; then
+if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Blueman${RESET}?"; then
     echo "Installing Blueman..."
     sudo dnf install blueman -y
 fi
@@ -181,7 +188,7 @@ fi
 ############################
 
 # Copy dotfiles
-if install_dots || prompt_user "Do you wanna install ${SKY_BLUE}dotfiles${RESET}?"; then
+if [ "$install_dots" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}dotfiles${RESET}?"; then
     echo "Copying dotfiles..."
     cp -r 'assets/.config' ~/
 fi
