@@ -9,6 +9,8 @@ plugins=(
     zsh-syntax-highlighting
 )
 
+export ZSH_COMPDUMP=$ZSH/cache/.zcompdump-$HOST
+
 source $ZSH/oh-my-zsh.sh
 
 HISTFILE=~/.zsh_history
