@@ -151,6 +151,13 @@ if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}
     chsh -s "$(command -v zsh)"
 fi
 
+
+## Install Gnome-keyring and Seahorse
+if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Gnome Keyring${RESET}?"; then
+    sudo dnf install gnome-keyring -y
+    sudo dnf install seahorse -y
+fi
+
 ############################
 ########### APPS ###########
 ############################
