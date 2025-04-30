@@ -112,12 +112,19 @@ sudo systemctl set-default graphical.target
 
 sudo dnf install gtk2 gtk3 gtk3-devel -y
 sudo dnf install xdg-desktop-portal-hyprland xdg-desktop-portal-gtk -y
+sudo dnf install xwaylandvideobridge -y
 
 if [ "$install_dots" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}GTK Theme${RESET}?"; then
     echo "Installing Where is my GTK theme..."
     sudo dnf install materia-gtk-theme -y     
     sudo dnf install papirus-icon-theme -y  
 fi
+
+if [ "$install_dots" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Swaybg${RESET}?"; then
+    echo "Installing Swaybg..."
+    sudo dnf install swaybg -y     
+fi
+
 
 # Install foot
 if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Foot${RESET}?"; then
@@ -154,8 +161,16 @@ fi
 
 ## Install Gnome-keyring and Seahorse
 if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Gnome Keyring${RESET}?"; then
+    echo "Installing Gnome Keyring and Seahorse..."
     sudo dnf install gnome-keyring -y
     sudo dnf install seahorse -y
+fi
+
+
+## Install Mate Polkit
+if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Mate Polkit${RESET}?"; then
+    echo "Installing Mate Polkit..."
+    sudo dnf install mate-polkit -y
 fi
 
 ############################
