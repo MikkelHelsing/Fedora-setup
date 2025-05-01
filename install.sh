@@ -1,7 +1,6 @@
 #!/bin/bash
 
 install_all="false"
-install_dots="false"
 install_nvidia="false"
 
 RED="$(tput setaf 1)"
@@ -20,7 +19,6 @@ print_help() {
     echo ""
     echo "Options:"
     echo "  --all         Install everything except NVIDIA drivers"
-    echo "  --dots        Install dotfiles"
     echo "  --nvidia      Install NVIDIA drivers"
     echo "  -h, --help    Show this help message and exit"
     echo ""
@@ -33,11 +31,6 @@ while [[ $# -gt 0 ]]; do
     case "$1" in
         --all)
             install_all="true"
-            install_dots="true"
-            shift
-            ;;
-        --dots)
-            install_dots="true"
             shift
             ;;
         --nvidia)
@@ -97,13 +90,11 @@ sudo systemctl enable sddm
 sudo dnf install qt6-qt5compat qt6-qtdeclarative qt6-qtsvg -y
 
 ## Install theme for sddm
-if [ "$install_dots" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Where Is My SDDM Theme${RESET}?"; then
-    echo "Installing Where is my SDDM theme..."
-    git clone https://github.com/stepanzubkov/where-is-my-sddm-theme.git
-    sudo ./where-is-my-sddm-theme/install.sh current
-    rm -drf where-is-my-sddm-theme/
-    sudo cp 'assets/sddm.conf' /etc/
-fi
+echo "Installing Where is my SDDM theme..."
+git clone https://github.com/stepanzubkov/where-is-my-sddm-theme.git
+sudo ./where-is-my-sddm-theme/install.sh current
+rm -drf where-is-my-sddm-theme/
+sudo cp 'assets/sddm.conf' /etc/
 
 # Install Hyprland
 echo "Installing Hyprland..."
@@ -114,64 +105,63 @@ sudo dnf install gtk2 gtk3 gtk3-devel -y
 sudo dnf install xdg-desktop-portal-hyprland xdg-desktop-portal-gtk -y
 sudo dnf install xwaylandvideobridge -y
 
-if [ "$install_dots" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}GTK Theme${RESET}?"; then
-    echo "Installing Where is my GTK theme..."
-    sudo dnf install materia-gtk-theme -y     
-    sudo dnf install papirus-icon-theme -y  
-fi
+echo "Installing Where is my GTK theme..."
+sudo dnf install materia-gtk-theme -y     
+sudo dnf install papirus-icon-theme -y  
 
-if [ "$install_dots" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Swaybg${RESET}?"; then
-    echo "Installing Swaybg..."
-    sudo dnf install swaybg -y     
-fi
-
-
-# Install foot
-if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Foot${RESET}?"; then
-    echo "Installing Foot..."
-    sudo dnf install foot -y
-fi
+# Install foot and remove Kitty
+echo "Installing Foot..."
+sudo dnf install foot -y
+sudo dnf remove kitty -y
 
 ## Install Oh My ZSH
-if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}ZSH${RESET}?"; then
-    echo "Installing Oh My ZSH..."
+echo "Installing Oh My ZSH..."
 
-    sudo dnf install zsh -y 
-    sudo chsh -s /bin/zsh
+sudo dnf install zsh -y 
+sudo chsh -s /bin/zsh
 
-    sh -c "$(curl -fsSL https://install.ohmyz.sh)" "" --unattended
-    git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions 
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting 
+sh -c "$(curl -fsSL https://install.ohmyz.sh)" "" --unattended
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions 
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting 
 
-    sudo dnf install lsd -y
-    sudo dnf install powerline-fonts -y
-    sudo dnf install fastfetch -y
+sudo dnf install lsd -y
+sudo dnf install powerline-fonts -y
+sudo dnf install fastfetch -y
 
-    curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz
-    sudo mkdir /usr/share/fonts/jetbrains-mono
-    sudo tar -xf JetBrainsMono.tar.xz -C /usr/share/fonts/jetbrains-mono
-    rm -f JetBrainsMono.tar.xz
+curl -OL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz
+sudo mkdir /usr/share/fonts/jetbrains-mono
+sudo tar -xf JetBrainsMono.tar.xz -C /usr/share/fonts/jetbrains-mono
+rm -f JetBrainsMono.tar.xz
 
-    rm -f ~/.zshrc
-    cp -r 'assets/.zshrc' ~/
-    
-    chsh -s "$(command -v zsh)"
-fi
+rm -f ~/.zshrc
+cp -r 'assets/.zshrc' ~/
+
+chsh -s "$(command -v zsh)"
 
 
 ## Install Gnome-keyring and Seahorse
-if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Gnome Keyring${RESET}?"; then
-    echo "Installing Gnome Keyring and Seahorse..."
-    sudo dnf install gnome-keyring -y
-    sudo dnf install seahorse -y
-fi
+echo "Installing Gnome Keyring and Seahorse..."
+sudo dnf install gnome-keyring -y
+sudo dnf install seahorse -y
 
+# Hyprland ecosystem
+sudo dnf copr enable solopasha/hyprland -y
 
-## Install Mate Polkit
-if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Mate Polkit${RESET}?"; then
-    echo "Installing Mate Polkit..."
-    sudo dnf install mate-polkit -y
-fi
+## Install hypridle
+echo "Installing Hypridle..."
+sudo dnf install hypridle -y
+
+## Install hyprlock
+echo "Installing Hyprlock..."
+sudo dnf install hyprlock -y
+
+## Install hyprpolkitagent
+echo "Installing Hyprpolkitagent..."
+sudo dnf install hyprpolkitagent -y
+
+## Install hyprpaper
+echo "Installing Hyprpaper..."
+sudo dnf install hyprpaper -y
 
 ############################
 ########### APPS ###########
@@ -210,7 +200,5 @@ fi
 ############################
 
 # Copy dotfiles
-if [ "$install_dots" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}dotfiles${RESET}?"; then
-    echo "Copying dotfiles..."
-    cp -r 'assets/.config' ~/
-fi
+echo "Copying dotfiles..."
+cp -r 'assets/.config' ~/
