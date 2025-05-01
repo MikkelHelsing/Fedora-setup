@@ -65,8 +65,9 @@ prompt_user() {
 }
 
 
+
 ############################
-########## Setup ###########
+########## Nvidia ##########
 ############################
 
 # Install Nvidia 
@@ -83,6 +84,12 @@ if [ "$install_nvidia" = "true" ] || prompt_user "Do you wanna install ${GREEN}N
     fi
 fi
 
+
+
+############################
+########### SDDM ###########
+############################
+
 # Install display manager SDDM
 echo "Installing SDDM..."
 sudo dnf install sddm -y
@@ -96,6 +103,12 @@ sudo ./where-is-my-sddm-theme/install.sh current
 rm -drf where-is-my-sddm-theme/
 sudo cp 'assets/sddm.conf' /etc/
 
+
+
+############################
+######### Hyprland #########
+############################
+
 # Install Hyprland
 echo "Installing Hyprland..."
 sudo dnf install hyprland hyprland-devel -y
@@ -108,6 +121,44 @@ sudo dnf install xwaylandvideobridge -y
 echo "Installing Where is my GTK theme..."
 sudo dnf install materia-gtk-theme -y     
 sudo dnf install papirus-icon-theme -y  
+
+# Hyprland ecosystem
+sudo dnf copr enable solopasha/hyprland -y
+
+## Install hypridle
+echo "Installing Hypridle..."
+sudo dnf install hypridle -y
+
+## Install hyprlock
+echo "Installing Hyprlock..."
+sudo dnf install hyprlock -y
+
+## Install hyprpolkitagent
+echo "Installing Hyprpolkitagent..."
+sudo dnf install hyprpolkitagent -y
+
+## Install hyprpaper
+echo "Installing Hyprpaper..."
+sudo dnf install hyprpaper -y
+
+## Install Gnome-keyring and Seahorse
+echo "Installing Gnome Keyring and Seahorse..."
+sudo dnf install gnome-keyring -y
+sudo dnf install seahorse -y
+
+
+
+############################
+########## Topbar ##########
+############################
+
+echo "Installing Swaync..."
+sudo dnf install swaync -y
+
+
+############################
+######### Terminal #########
+############################
 
 # Install foot and remove Kitty
 echo "Installing Foot..."
@@ -139,29 +190,6 @@ cp -r 'assets/.zshrc' ~/
 chsh -s "$(command -v zsh)"
 
 
-## Install Gnome-keyring and Seahorse
-echo "Installing Gnome Keyring and Seahorse..."
-sudo dnf install gnome-keyring -y
-sudo dnf install seahorse -y
-
-# Hyprland ecosystem
-sudo dnf copr enable solopasha/hyprland -y
-
-## Install hypridle
-echo "Installing Hypridle..."
-sudo dnf install hypridle -y
-
-## Install hyprlock
-echo "Installing Hyprlock..."
-sudo dnf install hyprlock -y
-
-## Install hyprpolkitagent
-echo "Installing Hyprpolkitagent..."
-sudo dnf install hyprpolkitagent -y
-
-## Install hyprpaper
-echo "Installing Hyprpaper..."
-sudo dnf install hyprpaper -y
 
 ############################
 ########### APPS ###########
