@@ -2,17 +2,17 @@ window {
 margin: 0px;
 border: none;
 border-radius: 25px;
-background-color: rgba(7, 0, 16, 0.75);
+background-color: rgba(7, 0, 16, 0);
 }
 
 #input {
-margin: 15px;
+margin: 10px;
 margin-top: 10px;
 padding: 10px 20px;
-border: none;
+border: 2px black;
 border-radius: 25px;
 color: #f8f8f2;
-background-color: rgba(44, 48, 66, 0.5);
+background-color: rgba(28, 27, 28, 0.85);
 }
 
 #inner-box {
@@ -36,6 +36,7 @@ border: none;
 
 #text {
 margin: 5px;
+margin-left: 10px;
 border: none;
 color: #f8f8f2;
 } 
@@ -45,9 +46,13 @@ color: #070010;
 }
 
 #entry {
-border-radius: 10px;
+border-radius: 20px;
+padding: 5px;
+padding-left: 20px;
 margin-left: 5px;
 margin-right: 5px;
+margin-top: 7px;
+background-color: rgba(28, 27, 28, 0.85);
 }
 
 #entry > * {

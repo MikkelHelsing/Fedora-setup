@@ -8,3 +8,6 @@ hide_scroll = true
 allow_markup=true
 width=400
 height=350
+allow_images=true
+image_size=25
+gtk_dark=true
