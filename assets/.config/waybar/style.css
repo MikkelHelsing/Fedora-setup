@@ -1,0 +1,183 @@
+@define-color base rgb(7, 0, 10);
+@define-color background rgba(37, 34, 45, 0.5);
+@define-color hover rgb(150, 150, 150);
+@define-color click rgb(175, 175, 175);
+@define-color text rgb(235, 235, 240);
+@define-color main rgb(160, 21, 62);
+@define-color warn rgb(249, 248, 113);
+@define-color teal rgb(0, 201, 187);
+
+
+* {
+    font-family: "JetBrainsMono Nerd Font", Roboto, Helvetica, Arial, sans-serif;
+}
+
+window#waybar {
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+button {
+    all:unset;
+    border-radius: 0;
+    padding: 2px;
+}
+
+#idle_inhibitor,
+#clock,
+#custom-swaync,
+#taskbar,
+#workspaces,
+#powermanagement,
+#mpris,
+#network,
+#stats {
+    font-size: 0.8rem;
+    margin: 0;
+    margin-top: 0.3rem;
+    margin-right: 0.4rem;
+    padding-right: 0.8rem;
+    padding-left: 0.8rem;
+    border-radius: 100;
+    color: @text;
+    background-color: @background;
+}
+
+#custom-swaync {
+    font-size: 1.1rem;
+    padding: 0 0.4rem;
+    padding-right: 0.67rem;
+}
+
+#mpris,
+#taskbar,
+#custom-swaync {
+    margin-left: 0.4rem;
+    margin-right: 0;
+}
+
+#taskbar {
+    padding-left: 0.7rem;
+}
+
+#taskbar button {
+    margin: 0 0.1rem;
+}
+
+#taskbar button:hover {
+    transition: all 0.3s ease;
+    box-shadow: inset 0 -1px @text;
+}
+
+#taskbar button.active {
+    box-shadow: inset 0 -1px @main;
+}
+
+#workspaces {
+    padding: 0 0.4rem;
+    padding-right: 0.5rem;
+}
+
+#workspaces button {
+    font-size: 1.2rem;
+    padding: 0 0.4rem;
+    color: alpha(@text, 0.8);
+    transition: all 0.3s ease;
+    border: none;
+}
+
+#workspaces button:hover {
+    color: alpha(@hover, 0.8);
+}
+
+#workspaces button.active {
+    color: alpha(@main, 0.8);
+}
+
+#workspaces button.active:hover {
+    color: alpha(@main, 0.6);
+}
+
+#workspaces button.empty {
+    color: alpha(@base, 0.4);
+}
+
+#workspaces button.empty:hover {
+    color: alpha(@hover, 0.4);
+}
+
+#workspaces button.empty.active {
+    color: alpha(@main, 0.4);
+}
+
+#power-profiles-daemon {
+    margin-right: 6px;
+}
+
+#power-profiles-daemon.performance {
+    color: @main;
+}
+
+
+#power-profiles-daemon.balanced {
+    color: @text;
+}
+
+#power-profiles-daemon.power-saver {
+    color: @teal;
+}
+
+#battery {
+    color: @text
+}
+
+#battery.charging,
+#battery.plugged {
+  color: @teal;
+}
+
+@keyframes blink {
+    to {
+      color: @text;
+    }
+  }
+
+/* Using steps() instead of linear as a timing function to limit cpu usage */
+#battery.critical:not(.charging) {
+    color: @main;
+    animation-name: blink;
+    animation-duration: 1s;
+    animation-timing-function: steps(12);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#network {
+    padding-right: 1.2rem;
+}
+
+#memory,
+#battery,
+#cpu,
+#temperature {
+    margin-right: 0.7rem;
+}
+
+#memory.warning,
+#cpu.warning {
+    color: @warn;
+}
+
+#temperature.critical,
+#memory.critical,
+#cpu.critical {
+    color: @main;
+}
+
+#idle_inhibitor {
+    padding-right: 1.05rem;
+}
+
+#idle_inhibitor.activated {
+    background-color: alpha(@main, 0.4);
+}
