@@ -158,6 +158,9 @@ sudo dnf install swaync -y
 echo "Installing Waybar..."
 sudo dnf install waybar -y
 
+echo "Installing Power profiles daemon..."
+sudo dnf install power-profiles-daemon -y
+
 ############################
 ######### Terminal #########
 ############################
