@@ -155,6 +155,8 @@ sudo dnf install seahorse -y
 echo "Installing Swaync..."
 sudo dnf install swaync -y
 
+echo "Installing Waybar..."
+sudo dnf install waybar -y
 
 ############################
 ######### Terminal #########
@@ -222,6 +224,46 @@ if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}
     sudo dnf install blueman -y
 fi
 
+############################
+########## Extra ###########
+############################
+
+THRESHOLD_FILE="/sys/class/power_supply/BAT0/charge_stop_threshold"
+DESIRED_THRESHOLD=80
+if [ -f "$THRESHOLD_FILE" ] && prompt_user "Do you want to ${SKY_BLUE}limit battery charge to ${DESIRED_THRESHOLD}%${RESET}?"; then
+    SCRIPT_PATH="/usr/local/bin/charge_thresholds"
+    sudo tee "$SCRIPT_PATH" > /dev/null <<EOF
+#!/usr/bin/bash
+CURRENT=\$(cat $THRESHOLD_FILE)
+if [ "\$CURRENT" != "$DESIRED_THRESHOLD" ]; then
+    echo $DESIRED_THRESHOLD | sudo tee $THRESHOLD_FILE > /dev/null
+fi
+EOF
+
+    sudo chmod +x "$SCRIPT_PATH"
+
+    # Create systemd service
+    SERVICE_PATH="/etc/systemd/system/charge_thresholds.service"
+    sudo tee "$SERVICE_PATH" > /dev/null <<EOF
+[Unit]
+Description=Set battery charge stop threshold to $DESIRED_THRESHOLD%
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=$SCRIPT_PATH
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    sudo systemctl daemon-reexec
+    sudo systemctl enable charge_thresholds.service
+    sudo systemctl start charge_thresholds.service
+
+    echo -e "${SKY_BLUE}Battery charge threshold set to 80% and service enabled.${RESET}"
+fi
 
 ############################
 ######### Dotfiles #########
