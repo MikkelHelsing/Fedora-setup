@@ -21,6 +21,10 @@ bash ./install.sh
 ```
 
 # Setup depended
+## Monitor config
+Remember to configure monitors:
+[Hyprland wiki](https://wiki.hyprland.org/Configuring/Monitors/)
+
 ## Waybar temperature
 How temperature is read varies greatly, see for how to configure here:
 [Waybar wiki](https://github.com/Alexays/Waybar/wiki/Module:-Temperature).

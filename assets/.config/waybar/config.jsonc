@@ -1,16 +1,12 @@
 {
     "layer": "top",
-    "modules-left": ["custom/swaync", "wlr/taskbar", "mpris"],
+    "modules-left": ["wlr/taskbar", "mpris"],
     "modules-center": ["hyprland/workspaces"],
-    "modules-right": ["idle_inhibitor", "group/powermanagement", "network", "group/stats", "clock"],
-    "custom/swaync": {
-		"format": "",
-		"tooltip": false,
-		"on-click": "swaync-client -op"
-	},
+    "modules-right": ["group/extra", "pulseaudio#output", "group/powermanagement", "group/stats", "custom/updates", "privacy", "clock", "custom/swaync"],
     "wlr/taskbar": {
         "format": "{icon}",
-        "icon-size": 14,
+        "icon-size": 16,
+        "hide-empty-text": true,
         "tooltip-format": "{title}",
         "on-click": "activate",
         "on-click-middle": "close",
@@ -18,7 +14,12 @@
             "foot"
         ]
     },
+    "tray": {
+        "icon-size": 16,
+        "spacing": 10
+    },
     "mpris": {
+        "interval": 1,
         "format": "{player_icon} {dynamic}",
         "format-paused": "{status_icon} <i>{dynamic}</i>",
         "player-icons": {
@@ -28,7 +29,7 @@
         "status-icons": {
             "paused": "⏸"
         },
-        "dynamic-len": 20
+        "dynamic-len": 40
     },
     "hyprland/workspaces": {
         "format": "{icon}",
@@ -57,6 +58,57 @@
         },
         "tooltip-format-activated": "Presentation mode enabled",
         "tooltip-format-deactivated": "Presentation mode disabled"
+    },
+    "pulseaudio#output": {
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{icon} {volume}% 󰂰",
+        "tooltip": false,
+        "format-muted": "",
+        "on-click": "python ~/.config/waybar/scripts/audio_changer.py Sinks",
+        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "scroll-step": 5,
+        "format-icons": ["", "", ""],
+        "ignored-sinks": ["Easy Effects Sink"]
+    },
+    "pulseaudio#input": {
+        "format": "{format_source}",
+        "format-source": "󰍬 {volume}%",
+        "tooltip": false,
+        "format-source-muted": "󰍭",
+        "on-click": "python ~/.config/waybar/scripts/audio_changer.py Sources",
+        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 1%-",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+        "scroll-step": 5,
+        "ignored-sinks": ["Easy Effects Source"]
+    },
+    "custom/drawer": {
+        "format":"󰄽",
+        "tooltip": false
+    },
+    "group/extra": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-left-to-right": false,
+            "click-to-reveal": true
+        },
+        "modules": [
+            "custom/drawer", "tray", "idle_inhibitor", "pulseaudio#input"
+        ]
+    },
+    "network": {
+        "format": "",
+        "format-wifi": "{essid} ({signalStrength}%) {icon}",
+        "format-ethernet": "",
+        "format-disconnected": "",
+        "tooltip-format": "{ifname} via {gwaddr}",
+        "tooltip-format-wifi": "{essid} {ipaddr} ({signalStrength}%) {icon}",
+        "tooltip-format-ethernet": "{ipaddr}/{cidr} ",
+        "tooltip-format-disconnected": "Disconnected",
+        "format-icons": ["󰣾","󰣴","󰣶","󰣸","󰣺"],
+        "max-length": 50
     },
     "power-profiles-daemon": {
         "format": "{icon}",
@@ -92,18 +144,6 @@
 				"battery"
 			]
 	},
-    "network": {
-        "format": "",
-        "format-wifi": "{essid} ({signalStrength}%) {icon}",
-        "format-ethernet": "",
-        "format-disconnected": "",
-        "tooltip-format": "{ifname} via {gwaddr}",
-        "tooltip-format-wifi": "{essid} {ipaddr} ({signalStrength}%) {icon}",
-        "tooltip-format-ethernet": "{ipaddr}/{cidr} ",
-        "tooltip-format-disconnected": "Disconnected",
-        "format-icons": ["󰣾","󰣴","󰣶","󰣸","󰣺"],
-        "max-length": 50
-    },
 	"cpu": {
         "interval": 10,
         "format": " {usage}%",
@@ -121,6 +161,7 @@
     "memory": {
         "interval": 10,
         "format": " {used:0.1f}GB",
+        "tooltip-format": " {percentage}%, {used}/{total}GB",
         "states": {
             "warning": 75,
             "critical": 90
@@ -128,20 +169,78 @@
     },
     "disk": {
         "interval": 300,
-        "format": "󰋊 {specific_used:0.1f}/{specific_total:0.1f}GB",
+        "tooltip-format": "󰋊 {specific_used:0.1f}/{specific_total:0.1f}GB",
+        "format": "󰋊 {percentage_used}%",
         "unit": "GB"
     },
     "group/stats": {
-		"orientation": "inherit",
+        "orientation": "inherit",
+        "drawer": {
+            "transition-left-to-right": false,
+            "click-to-reveal": true
+        },
 		"modules": [
+            "network", 
             "cpu",
             "temperature",
             "memory",
             "disk"
 		]
 	},
+    "custom/updates": {
+        "exec": "bash $HOME/.config/waybar/scripts/checkupdates.sh",
+        "on-click-left": "bash $HOME/.config/waybar/scripts/checkupdates.sh",
+        "on-click-right": "foot sudo dnf update",
+        "interval": 600,
+        "hide-empty-text": true,
+        "return-type": "json",
+        "format": "{} {icon}",
+        "format-alt": "{icon} {}",
+        "format-icons": {
+            "has-updates": "",
+            "updated": ""
+        }
+    },
+    "privacy": {
+        "icon-spacing": 4,
+        "icon-size": 18,
+        "transition-duration": 250,
+        "modules": [
+            {
+                "type": "screenshare",
+                "tooltip": true,
+                "tooltip-icon-size": 24
+            },
+            {
+                "type": "audio-in",
+                "tooltip": true,
+                "tooltip-icon-size": 24
+            }
+        ]
+    },
     "clock": {
         "format-alt": "{:%A, %d. %b  %H:%M}",
         "tooltip-format": "<tt>{calendar}</tt>"
+    },
+    "custom/swaync": {
+        "tooltip": true,
+        "tooltip-format": "Left Click: Launch Notification Center\nRight Click: Do not Disturb",
+        "format": "{icon}",
+        "format-icons": {
+            "notification": "<span foreground='red'><sup></sup></span>",
+            "none": "",
+            "dnd-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-none": "",
+            "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+            "inhibited-none": "",
+            "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-inhibited-none": ""
+        },
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "sleep 0.1 && swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
     }
 }

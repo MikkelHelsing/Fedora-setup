@@ -1,11 +1,12 @@
 @define-color base rgb(7, 0, 10);
-@define-color background rgba(37, 34, 45, 0.5);
+@define-color background rgb(37, 34, 45);
 @define-color hover rgb(150, 150, 150);
 @define-color click rgb(175, 175, 175);
 @define-color text rgb(235, 235, 240);
-@define-color main rgb(160, 21, 62);
+@define-color main rgb(74, 143, 231);
 @define-color warn rgb(249, 248, 113);
 @define-color teal rgb(0, 201, 187);
+@define-color error rgb(160, 21, 62);
 
 
 * {
@@ -30,7 +31,11 @@ button {
 #workspaces,
 #powermanagement,
 #mpris,
-#network,
+#custom-updates,
+#pulseaudio,
+#privacy,
+#custom-drawer,
+#tray,
 #stats {
     font-size: 0.8rem;
     margin: 0;
@@ -40,18 +45,30 @@ button {
     padding-left: 0.8rem;
     border-radius: 100;
     color: @text;
-    background-color: @background;
+    background-color: alpha(@background, 0.5);
 }
 
 #custom-swaync {
-    font-size: 1.1rem;
-    padding: 0 0.4rem;
-    padding-right: 0.67rem;
+    padding: 0 0.85rem;
+    padding-right: 1rem;
 }
 
+#privacy {
+    background-color: alpha(@error, 0.8);
+}
+
+#custom-swaync.notification,
+#custom-swaync.inhibited-notification,
+#custom-swaync.dnd-inhibited-notification {
+    background-color: alpha(@main, 0.8);
+    padding-right: 0.70rem;
+    transition: background-color 0.5s ease;
+}
+
+
+#custom-updates,
 #mpris,
-#taskbar,
-#custom-swaync {
+#taskbar {
     margin-left: 0.4rem;
     margin-right: 0;
 }
@@ -115,7 +132,7 @@ button {
 }
 
 #power-profiles-daemon.performance {
-    color: @main;
+    color: @error;
 }
 
 
@@ -133,18 +150,18 @@ button {
 
 #battery.charging,
 #battery.plugged {
-  color: @teal;
+    color: @teal;   
 }
 
 @keyframes blink {
     to {
-      color: @text;
+        color: @text;
     }
-  }
+}
 
 /* Using steps() instead of linear as a timing function to limit cpu usage */
 #battery.critical:not(.charging) {
-    color: @main;
+    color: @error;
     animation-name: blink;
     animation-duration: 1s;
     animation-timing-function: steps(12);
@@ -153,10 +170,12 @@ button {
 }
 
 #network {
-    padding-right: 1.2rem;
+    margin-right: 0.3rem;
+    padding-right: 0.25rem;
 }
 
 #memory,
+#disk,
 #battery,
 #cpu,
 #temperature {
@@ -171,7 +190,7 @@ button {
 #temperature.critical,
 #memory.critical,
 #cpu.critical {
-    color: @main;
+    color: @error;
 }
 
 #idle_inhibitor {
@@ -179,5 +198,5 @@ button {
 }
 
 #idle_inhibitor.activated {
-    background-color: alpha(@main, 0.4);
+    background-color: alpha(@error, 0.4);
 }

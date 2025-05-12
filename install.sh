@@ -141,10 +141,19 @@ sudo dnf install hyprpolkitagent -y
 echo "Installing Hyprpaper..."
 sudo dnf install hyprpaper -y
 
+
+
+############################
+######### Utility ##########
+############################
+
 ## Install Gnome-keyring and Seahorse
 echo "Installing Gnome Keyring and Seahorse..."
 sudo dnf install gnome-keyring -y
 sudo dnf install seahorse -y
+
+echo "Installing Cliphist..."
+sudo dnf install cliphist -y
 
 
 
@@ -160,6 +169,9 @@ sudo dnf install waybar -y
 
 echo "Installing Power profiles daemon..."
 sudo dnf install power-profiles-daemon -y
+
+echo "Installing Network Manager Applet..."
+sudo dnf install libappindicator network-manager-applet -y
 
 ############################
 ######### Terminal #########
@@ -200,6 +212,11 @@ chsh -s "$(command -v zsh)"
 ########### APPS ###########
 ############################
 
+echo "Installing Nautilus..."
+sudo dnf copr enable monkeygold/nautilus-open-any-terminal -y
+sudo dnf install nautilus-open-any-terminal -y
+gsettings set com.github.stunkymonkey.nautilus-open-any-terminal terminal foot
+
 # VSCode
 if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}VSCODE${RESET}?"; then
     echo "Installing VSCode..."
@@ -225,6 +242,17 @@ fi
 if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Blueman${RESET}?"; then
     echo "Installing Blueman..."
     sudo dnf install blueman -y
+fi
+
+# Spotify
+if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Spotify${RESET}?"; then
+    echo "Installing Spotify..."
+    sudo dnf install -y flatpak
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    flatpak install flathub com.spotify.Client
+
+    sudo chmod a+wr /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify
+    sudo chmod a+wr -R /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify/Apps
 fi
 
 ############################
@@ -275,3 +303,5 @@ fi
 # Copy dotfiles
 echo "Copying dotfiles..."
 cp -r 'assets/.config' ~/
+
+chmod +x  ~/.config/waybar/scripts/audio_changer.py

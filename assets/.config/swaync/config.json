@@ -30,9 +30,9 @@
     "widgets": [
         "title",
         "notifications",
-        "volume",
         "buttons-grid",
-        "mpris"
+        "mpris",
+        "volume"
     ],
     "widget-config": {
         "title": {
@@ -51,13 +51,13 @@
             "actions": [
                 {
                     "label": "󰝟",
-                    "command": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-                    "type": "toggle"
+                    "command": "exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+                    "type": "button"
                 },
                 {
                     "label": "󰍭",
                     "command": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
-                    "type": "toggle"
+                    "type": "button"
                 },
                 {
                     "label": "",

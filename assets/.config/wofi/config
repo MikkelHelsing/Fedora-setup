@@ -11,3 +11,4 @@ height=350
 allow_images=true
 image_size=25
 gtk_dark=true
+line_wrap=word
