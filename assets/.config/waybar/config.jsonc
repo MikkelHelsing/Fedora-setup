@@ -1,8 +1,8 @@
 {
     "layer": "top",
-    "modules-left": ["wlr/taskbar", "mpris"],
+    "modules-left": ["clock", "idle_inhibitor", "wlr/taskbar", "group/extra"],
     "modules-center": ["hyprland/workspaces"],
-    "modules-right": ["group/extra", "pulseaudio#output", "group/powermanagement", "group/stats", "custom/updates", "privacy", "clock", "custom/swaync"],
+    "modules-right": ["mpris", "network", "group/stats", "group/powermanagement", "pulseaudio#input", "pulseaudio#output", "custom/updates", "privacy", "custom/swaync"],
     "wlr/taskbar": {
         "format": "{icon}",
         "icon-size": 16,
@@ -29,22 +29,14 @@
         "status-icons": {
             "paused": "⏸"
         },
-        "dynamic-len": 40
+        "dynamic-order": ["artist", "title"],
+        "dynamic-len": 50
     },
     "hyprland/workspaces": {
         "format": "{icon}",
         "format-icons": {
-            "1": "󰲠",
-            "2": "󰲢",
-            "3": "󰲤",
-            "4": "󰲦",
-            "5": "󰲨",
-            "6": "󰲪",
-            "7": "󰲬",
-            "8": "󰲮",
-            "9": "󰲰",
-            "10": "󰿬",
-            "default": ""
+            "default": "",
+            "active": ""
         },
         "persistent-workspaces": {
             "*": [ 1,2,3,4,5 ]
@@ -53,8 +45,8 @@
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
-            "activated": "󰐩",
-            "deactivated": "󰒲"
+            "activated": "󰈈",
+            "deactivated": "󰈉"
         },
         "tooltip-format-activated": "Presentation mode enabled",
         "tooltip-format-deactivated": "Presentation mode disabled"
@@ -85,27 +77,27 @@
         "ignored-sinks": ["Easy Effects Source"]
     },
     "custom/drawer": {
-        "format":"󰄽",
+        "format":"",
         "tooltip": false
     },
     "group/extra": {
         "orientation": "inherit",
         "drawer": {
-            "transition-left-to-right": false,
+            "transition-left-to-right": true,
             "click-to-reveal": true
         },
         "modules": [
-            "custom/drawer", "tray", "idle_inhibitor", "pulseaudio#input"
+            "custom/drawer", "tray"
         ]
     },
     "network": {
         "format": "",
-        "format-wifi": "{essid} ({signalStrength}%) {icon}",
-        "format-ethernet": "",
-        "format-disconnected": "",
+        "format-wifi": "({signalStrength}%) {icon}",
+        "format-ethernet": "󰈀",
+        "format-disconnected": "󱘖",
         "tooltip-format": "{ifname} via {gwaddr}",
         "tooltip-format-wifi": "{essid} {ipaddr} ({signalStrength}%) {icon}",
-        "tooltip-format-ethernet": "{ipaddr}/{cidr} ",
+        "tooltip-format-ethernet": "{ipaddr}/{cidr} 󰈀",
         "tooltip-format-disconnected": "Disconnected",
         "format-icons": ["󰣾","󰣴","󰣶","󰣸","󰣺"],
         "max-length": 50
@@ -180,7 +172,6 @@
             "click-to-reveal": true
         },
 		"modules": [
-            "network", 
             "cpu",
             "temperature",
             "memory",

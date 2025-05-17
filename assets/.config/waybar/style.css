@@ -1,5 +1,5 @@
 @define-color base rgb(7, 0, 10);
-@define-color background rgb(37, 34, 45);
+@define-color background rgb(15, 10, 20);
 @define-color hover rgb(150, 150, 150);
 @define-color click rgb(175, 175, 175);
 @define-color text rgb(235, 235, 240);
@@ -24,28 +24,54 @@ button {
     padding: 2px;
 }
 
-#idle_inhibitor,
-#clock,
-#custom-swaync,
 #taskbar,
+#clock,
 #workspaces,
+#idle_inhibitor,
+#custom-swaync,
 #powermanagement,
 #mpris,
 #custom-updates,
 #pulseaudio,
 #privacy,
-#custom-drawer,
-#tray,
+#extra,
+#network,
 #stats {
     font-size: 0.8rem;
     margin: 0;
     margin-top: 0.3rem;
-    margin-right: 0.4rem;
-    padding-right: 0.8rem;
-    padding-left: 0.8rem;
-    border-radius: 100;
     color: @text;
-    background-color: alpha(@background, 0.5);
+    background-color: alpha(@background, 0.75);
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+#extra {
+    border-radius: 0 0.33rem 0.33rem 0;
+    padding-right: 0.25rem;
+}
+
+#network {
+    border-radius: 0.33rem 0 0 0.33rem;
+    padding-left: 0.75rem;
+}
+
+#custom-drawer,
+#tray {
+    margin-right: 0.5rem;
+}
+
+#tray {
+    padding-left: 0.5rem;
+}
+
+#workspaces {
+    border-radius: 0.33rem;
+}
+
+#clock {
+    margin-left: 0;
+    padding-left: 1rem;
 }
 
 #custom-swaync {
@@ -53,8 +79,16 @@ button {
     padding-right: 1rem;
 }
 
+#mpris {
+    margin-right: 2rem;
+    border-radius: 0.33rem;
+    padding-left: 0.3rem;
+    padding-right: 0.75rem;
+}
+
 #privacy {
     background-color: alpha(@error, 0.8);
+    border-radius: 0.33rem;
 }
 
 #custom-swaync.notification,
@@ -66,33 +100,25 @@ button {
 }
 
 
-#custom-updates,
-#mpris,
-#taskbar {
+#custom-updates {
     margin-left: 0.4rem;
     margin-right: 0;
 }
 
-#taskbar {
-    padding-left: 0.7rem;
-}
-
 #taskbar button {
-    margin: 0 0.1rem;
+    margin: 0;
+    padding: 0rem 0.6rem;
+    border-radius: 0.33rem;
 }
 
 #taskbar button:hover {
     transition: all 0.3s ease;
-    box-shadow: inset 0 -1px @text;
+    background-color: alpha(@hover, 0.8);
 }
 
 #taskbar button.active {
-    box-shadow: inset 0 -1px @main;
-}
-
-#workspaces {
-    padding: 0 0.4rem;
-    padding-right: 0.5rem;
+    transition: all 0.3s ease;
+    background-color: alpha(@text, 0.1);
 }
 
 #workspaces button {
@@ -108,15 +134,11 @@ button {
 }
 
 #workspaces button.active {
-    color: alpha(@main, 0.8);
-}
-
-#workspaces button.active:hover {
-    color: alpha(@main, 0.6);
+    color: alpha(@text, 0.8);
 }
 
 #workspaces button.empty {
-    color: alpha(@base, 0.4);
+    color: alpha(@text, 0.1);
 }
 
 #workspaces button.empty:hover {
@@ -124,7 +146,7 @@ button {
 }
 
 #workspaces button.empty.active {
-    color: alpha(@main, 0.4);
+    color: alpha(@text, 0.4);
 }
 
 #power-profiles-daemon {
@@ -169,15 +191,9 @@ button {
     animation-direction: alternate;
 }
 
-#network {
-    margin-right: 0.3rem;
-    padding-right: 0.25rem;
-}
-
 #memory,
 #disk,
 #battery,
-#cpu,
 #temperature {
     margin-right: 0.7rem;
 }
@@ -193,10 +209,6 @@ button {
     color: @error;
 }
 
-#idle_inhibitor {
-    padding-right: 1.05rem;
-}
-
 #idle_inhibitor.activated {
-    background-color: alpha(@error, 0.4);
+    color: alpha(@error, 0.8);
 }
