@@ -73,7 +73,7 @@ prompt_user() {
 # Install Nvidia 
 if [ "$install_nvidia" = "true" ] || prompt_user "Do you wanna install ${GREEN}Nvidia Drivers${RESET}?"; then
     if lspci | grep -i "nvidia" &> /dev/null; then
-        sudo dnf install akmod-nvidia xorg-x11-drv-nvidia-cuda libva libva-nvidia-driver -y
+        sudo dnf install akmod-nvidia xorg-x11-drv-nvidia-cuda libva libva-nvidia-driver nvidia-vaapi-driver libva-utils vdpauinfo -y
         if ! grep -q "GRUB_CMDLINE_LINUX.*$additional_options" /etc/default/grub; then
             additional_options="rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1 nvidia_drm.fbdev=1"
             sudo sed -i "s/GRUB_CMDLINE_LINUX=\"/GRUB_CMDLINE_LINUX=\"$additional_options /" /etc/default/grub
@@ -141,6 +141,14 @@ sudo dnf install hyprpolkitagent -y
 echo "Installing Hyprpaper..."
 sudo dnf install hyprpaper -y
 
+## Install hyprnome
+echo "Installing Hyprnome..."
+sudo dnf install hyprnome -y
+
+## Install hyprshot
+echo "Installing Hyprshot"
+sudo dnf install hyprshot -y
+
 
 
 ############################
@@ -152,9 +160,13 @@ echo "Installing Gnome Keyring and Seahorse..."
 sudo dnf install gnome-keyring -y
 sudo dnf install seahorse -y
 
+# Install cliphist
 echo "Installing Cliphist..."
 sudo dnf install cliphist -y
 
+# Install nwg-displays
+echo "Installing Nwg Dislays..."
+sudo dnf install nwg-displays -y
 
 
 ############################
