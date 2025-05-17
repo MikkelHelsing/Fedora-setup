@@ -267,6 +267,12 @@ if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}
     sudo chmod a+wr -R /var/lib/flatpak/app/com.spotify.Client/x86_64/stable/active/files/extra/share/spotify/Apps
 fi
 
+# Discord
+if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}Discord${RESET}?"; then
+    echo "Installing Discord..."
+    sudo dnf install discord -y
+fi
+
 ############################
 ########## Extra ###########
 ############################
