@@ -189,9 +189,9 @@ sudo dnf install libappindicator network-manager-applet -y
 ######### Terminal #########
 ############################
 
-# Install foot and remove Kitty
-echo "Installing Foot..."
-sudo dnf install foot -y
+# Install Alacritty and remove Kitty
+echo "Installing Alacritty..."
+sudo dnf install alacritty -y
 sudo dnf remove kitty -y
 
 ## Install Oh My ZSH

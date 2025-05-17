@@ -1,7 +1,7 @@
 #!/bin/bash
 
+rsync --recursive --force ~/.config/alacritty ./assets/.config/
 rsync --recursive --force ~/.config/background ./assets/.config/
-rsync --recursive --force ~/.config/foot ./assets/.config/
 rsync --recursive --force ~/.config/gtk-3.0 ./assets/.config/
 rsync --recursive --force ~/.config/gtk-4.0 ./assets/.config/
 rsync --recursive --force ~/.config/hypr ./assets/.config/
