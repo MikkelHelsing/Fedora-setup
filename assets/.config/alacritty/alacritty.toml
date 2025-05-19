@@ -1,6 +1,6 @@
 [window]
 padding = { x = 0, y = 5}
-opacity = 0.5
+opacity = 0.75
 
 [font.normal]
 family = "JetBrainsMono Nerd Font"

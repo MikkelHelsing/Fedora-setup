@@ -38,6 +38,7 @@
             "default": "",
             "active": ""
         },
+        "move-to-monitor": true,
         "persistent-workspaces": {
             "*": [ 1,2,3,4,5 ]
         }
@@ -181,7 +182,7 @@
     "custom/updates": {
         "exec": "bash $HOME/.config/waybar/scripts/checkupdates.sh",
         "on-click-left": "bash $HOME/.config/waybar/scripts/checkupdates.sh",
-        "on-click-right": "foot sudo dnf update",
+        "on-click-right": "alacritty -e sudo dnf update",
         "interval": 600,
         "hide-empty-text": true,
         "return-type": "json",
