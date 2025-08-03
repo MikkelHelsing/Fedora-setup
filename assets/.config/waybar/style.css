@@ -150,7 +150,7 @@ button {
 }
 
 #power-profiles-daemon {
-    margin-right: 6px;
+    margin-right: 1rem;
 }
 
 #power-profiles-daemon.performance {
