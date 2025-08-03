@@ -23,7 +23,7 @@ print_help() {
     echo "  -h, --help    Show this help message and exit"
     echo ""
     echo "Example:"
-    echo "  $0 --all --dots"
+    echo "  $0 --all --nvidia"
 }
 
 # Parse arguments
@@ -71,16 +71,14 @@ prompt_user() {
 ############################
 
 # Install Nvidia 
-if [ "$install_nvidia" = "true" ] || prompt_user "Do you wanna install ${GREEN}Nvidia Drivers${RESET}?"; then
-    if lspci | grep -i "nvidia" &> /dev/null; then
+if lspci | grep -i "nvidia" &> /dev/null; then
+    if [ "$install_nvidia" = "true" ] || prompt_user "Do you wanna install ${GREEN}Nvidia Drivers${RESET}?"; then
         sudo dnf install akmod-nvidia xorg-x11-drv-nvidia-cuda libva libva-nvidia-driver nvidia-vaapi-driver libva-utils vdpauinfo -y
         if ! grep -q "GRUB_CMDLINE_LINUX.*$additional_options" /etc/default/grub; then
             additional_options="rd.driver.blacklist=nouveau modprobe.blacklist=nouveau nvidia-drm.modeset=1 nvidia_drm.fbdev=1"
             sudo sed -i "s/GRUB_CMDLINE_LINUX=\"/GRUB_CMDLINE_LINUX=\"$additional_options /" /etc/default/grub
         fi
         sudo grub2-mkconfig -o /boot/grub2/grub.cfg
-    else
-        echo "${YELLOW}[WARNING] Beware NVIDIA gpu not found, skipping installation...${RESET}"
     fi
 fi
 
@@ -158,7 +156,7 @@ sudo dnf install hyprshot -y
 
 ## Install Gnome-keyring and Seahorse
 echo "Installing Gnome Keyring and Seahorse..."
-sudo dnf install gnome-keyring -y
+sudo dnf install gnome-keyring libgnome-keyring -y
 sudo dnf install seahorse -y
 
 # Install cliphist
