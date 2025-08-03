@@ -90,19 +90,21 @@ fi
 ########### SDDM ###########
 ############################
 
-# Install display manager SDDM
-echo "Installing SDDM..."
-sudo dnf install sddm -y
-sudo systemctl enable sddm
 sudo dnf install qt6-qt5compat qt6-qtdeclarative qt6-qtsvg -y
 
-## Install theme for sddm
-echo "Installing Where is my SDDM theme..."
-git clone https://github.com/stepanzubkov/where-is-my-sddm-theme.git
-sudo ./where-is-my-sddm-theme/install.sh current
-rm -drf where-is-my-sddm-theme/
-sudo cp 'assets/sddm.conf' /etc/
+if [ "$install_all" = "true" ]  || prompt_user "Do you wanna install ${SKY_BLUE}SDDM${RESET}?"; then
+    # Install display manager SDDM
+    echo "Installing SDDM..."
+    sudo dnf install sddm -y
+    sudo systemctl enable sddm
 
+    ## Install theme for sddm
+    echo "Installing Where is my SDDM theme..."
+    git clone https://github.com/stepanzubkov/where-is-my-sddm-theme.git
+    sudo ./where-is-my-sddm-theme/install.sh current
+    rm -drf where-is-my-sddm-theme/
+    sudo cp 'assets/sddm.conf' /etc/
+fi
 
 
 ############################
@@ -124,6 +126,7 @@ sudo dnf install papirus-icon-theme -y
 
 # Hyprland ecosystem
 sudo dnf copr enable solopasha/hyprland -y
+
 
 ## Install hypridle
 echo "Installing Hypridle..."
@@ -166,6 +169,7 @@ sudo dnf install cliphist -y
 
 # Install nwg-displays
 echo "Installing Nwg Dislays..."
+sudo dnf copr enable tofik/nwg-shell -y
 sudo dnf install nwg-displays -y
 
 
