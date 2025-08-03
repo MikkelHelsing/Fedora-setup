@@ -152,8 +152,6 @@ sudo dnf install hyprnome -y
 echo "Installing Hyprshot"
 sudo dnf install hyprshot -y
 
-
-
 ############################
 ######### Utility ##########
 ############################
